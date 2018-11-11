@@ -7,6 +7,10 @@ import Typography from '@material-ui/core/Typography';
 
 import Form from './Form';
 
+//Redux Components
+import { Provider } from 'react-redux';
+import store from '../store';
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -23,20 +27,22 @@ function CenteredGrid(props) {
   const { classes } = props;
 
   return (
+    <Provider store={store}>
     <div className={classes.root}>
       <Grid container spacing={24} justify='center'>
         <Grid item xs={8}>
           <Paper className={classes.paper}>
             <div>
-              <Typography variant="display1" gutterBottom>
+              <Typography component="h2" variant="h4" gutterBottom>
                 Registration
-          </Typography>
+              </Typography>
             </div>
             <Form />
           </Paper>
         </Grid>
       </Grid>
     </div>
+    </Provider>
   );
 }
 
