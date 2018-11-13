@@ -9,6 +9,21 @@ import { connect } from 'react-redux';
 import * as userAction from '../actions/user-actions';
 import { compose } from 'redux';
 
+import firebase from 'firebase';
+
+var config = {
+    apiKey: "AIzaSyBkao7WZX40fEdIAV88phpYRkWBaPlT74c",
+    authDomain: "spm-project-ba632.firebaseapp.com",
+    databaseURL: "https://spm-project-ba632.firebaseio.com",
+    projectId: "spm-project-ba632",
+    storageBucket: "spm-project-ba632.appspot.com",
+    messagingSenderId: "605879743539",
+};
+
+firebase.initializeApp(config);
+
+var database = firebase.database();
+
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -55,9 +70,22 @@ class Registration extends React.Component {
     this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
+  writeUserData() {
+    database.ref('student/'+ this.state.userID).set({
+      userID : this.state.userID,
+      userName : this.state.userName,
+      gender : this.state.gender,
+      email : this.state.email,
+      password : this.state.password
+    });
+    console.log('Submitting to Firebase');
+  } 
+
+  // var userID = firebase.auth().currentUser.uid;
+  // return firebase.database.ref('student/'user)
+
   handleChange = name => event => {
     event.preventDefault();
-    console.log(name + ' : ' + event.target.value);
     this.setState({
       [name]: event.target.value,
     });
@@ -65,7 +93,6 @@ class Registration extends React.Component {
 
   handleTextChange = () => event => {
     event.preventDefault();
-    console.log(event.target.id + ' : ' + event.target.value);
     this.setState({
       [event.target.id]: event.target.value,
     });
@@ -84,6 +111,8 @@ class Registration extends React.Component {
             console.log(this.state);
 
             this.props.submitRegister(this.state);
+
+            this.writeUserData();
 
           } else {
             alert('Provide Password');
